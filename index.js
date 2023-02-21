@@ -1,12 +1,15 @@
 console.log("Welcome to My Tic Tac Toe game!");
-// let music = new Audio("Audiofile.mp3");
-// let turnaudio = new Audio("Audiofile.mp3");
-// let gameover = new Audio("Audiofile.mp3");
+let music = new Audio("basementcrime.mp3");
+let turnaudio = new Audio("changeturn.wav");
+let gameover = new Audio("draw.wav");
+let win = new Audio("win.wav");
 let turn = "X";
 let isgameover = false;
-
+let count = 0;
+music.play();
 //function to change the turn
 const changeturn = () => {
+  turnaudio.play();
   return turn === "X" ? "0" : "X";
 };
 
@@ -39,8 +42,16 @@ const checkwin = () => {
         ".line"
       ).style.transform = `translate(${e[3]}vw,${e[4]}vw) rotate(${e[5]}deg)`;
       document.querySelector(".line").style.width = "20vw";
+      win.play();
     }
   });
+};
+
+// Drow match logic
+const drawfunc = () => {
+  document.getElementsByClassName("info")[0].innerText = "It's a Draw";
+  gameover.play();
+  // alert("It's a Draw");
 };
 
 // Game Logic
@@ -54,10 +65,16 @@ Array.from(boxes).forEach((element) => {
       turn = changeturn();
       //   turnaudio.play();
       checkwin();
+      count += 1;
 
       if (!isgameover) {
         document.getElementsByClassName("info")[0].innerText =
           "Turn for " + turn;
+      }
+    }
+    if (!isgameover) {
+      if (count == 9) {
+        drawfunc();
       }
     }
   });
@@ -71,6 +88,7 @@ reset.addEventListener("click", () => {
   });
   turn = "X";
   isgameover = false;
+  count = 0;
   document.querySelector(".line").style.width = "0vw";
   document.querySelector(".imgbox").getElementsByTagName("img")[0].style.width =
     "0";
